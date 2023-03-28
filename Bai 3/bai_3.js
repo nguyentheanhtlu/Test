@@ -1,16 +1,43 @@
-function countPairs(A, n) {
+function findPairs(arr, n) {
+    let pairs = [];
     let count = 0;
-    for (let i = 0; i < A.length; i++) {
-        for (let j = i + 1; j < A.length; j++) {
-            if ((A[i] === n && A[j] !== n) || (A[i] !== n && A[j] === n)) {
-                count++;
-                console.log(`${A[i]}&${A[j]}`);
+    let arrNew = [];
+
+    arr.forEach((item) => {
+        if (arrNew.includes(item) === false) {
+            arrNew.push(item)
+        }
+    })
+
+
+    function generatePairs(index, current) {
+        if (current.length === n) {
+            pairs.push(current.slice());
+            count++;
+            return;
+        }
+
+        for (let i = index; i < arrNew.length; i++) {
+
+            if (current.includes(arrNew[i]) === false) {
+                current.push(arrNew[i]);
             }
+
+
+            generatePairs(i + 1, current);
+            current.pop();
         }
     }
-    return count;
+
+
+    generatePairs(0, []);
+    return {pairs, count};
 }
 
-const A = [1, 2, 3];
-console.log(countPairs(A, 2));
-console.log(countPairs(A, 3));
+
+let A = [1, 2, 3, 2, 4, 5,5];
+let n = 3;
+let result = findPairs(A, n);
+
+console.log(`Number of pairs: ${result.count}`);
+console.log(`Pairs: ${JSON.stringify(result.pairs)}`);
